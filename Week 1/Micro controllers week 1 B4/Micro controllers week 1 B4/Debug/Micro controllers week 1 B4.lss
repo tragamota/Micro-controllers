@@ -21,11 +21,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   8 .debug_frame  00000034  00000000  00000000  0000158c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000432  00000000  00000000  000015c0  2**0
+  9 .debug_str    00000442  00000000  00000000  000015c0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    0000006a  00000000  00000000  000019f2  2**0
+ 10 .debug_loc    0000006a  00000000  00000000  00001a02  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000018  00000000  00000000  00001a5c  2**0
+ 11 .debug_ranges 00000018  00000000  00000000  00001a6c  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -152,33 +152,33 @@ void wait(int ms) {
 int main(void)
 {
     /* Replace with your application code */
-	DDRD = 0xFF;
+	DDRC = 0xFF;
   c0:	8f ef       	ldi	r24, 0xFF	; 255
-  c2:	81 bb       	out	0x11, r24	; 17
+  c2:	84 bb       	out	0x14, r24	; 20
     while (1) 
     {
-		PORTD = 0x01;
+		PORTC = 0x01;
   c4:	c1 e0       	ldi	r28, 0x01	; 1
-  c6:	c2 bb       	out	0x12, r28	; 18
-		while(PORTD != 0) {
-  c8:	82 b3       	in	r24, 0x12	; 18
+  c6:	c5 bb       	out	0x15, r28	; 21
+		while(PORTC != 0) {
+  c8:	85 b3       	in	r24, 0x15	; 21
   ca:	88 23       	and	r24, r24
   cc:	e1 f3       	breq	.-8      	; 0xc6 <main+0x6>
 			wait(50);
   ce:	82 e3       	ldi	r24, 0x32	; 50
   d0:	90 e0       	ldi	r25, 0x00	; 0
   d2:	e5 df       	rcall	.-54     	; 0x9e <wait>
-			PORTD <<= 1;
-  d4:	82 b3       	in	r24, 0x12	; 18
+			PORTC <<= 1;
+  d4:	85 b3       	in	r24, 0x15	; 21
   d6:	88 0f       	add	r24, r24
-  d8:	82 bb       	out	0x12, r24	; 18
+  d8:	85 bb       	out	0x15, r24	; 21
     /* Replace with your application code */
-	DDRD = 0xFF;
+	DDRC = 0xFF;
     while (1) 
     {
-		PORTD = 0x01;
-		while(PORTD != 0) {
-  da:	82 b3       	in	r24, 0x12	; 18
+		PORTC = 0x01;
+		while(PORTC != 0) {
+  da:	85 b3       	in	r24, 0x15	; 21
   dc:	81 11       	cpse	r24, r1
   de:	f7 cf       	rjmp	.-18     	; 0xce <main+0xe>
   e0:	f2 cf       	rjmp	.-28     	; 0xc6 <main+0x6>

@@ -18,13 +18,13 @@ void wait(int ms) {
 int main(void)
 {
     /* Replace with your application code */
-	DDRD = 0xFF;
+	DDRC = 0xFF;
     while (1) 
     {
-		PORTD = 0x01;
-		while(PORTD != 0) {
+		PORTC = 0x01;
+		while(PORTC != 0) {
 			wait(50);
-			PORTD <<= 1;
+			PORTC <<= 1;
 		}
     }
 }

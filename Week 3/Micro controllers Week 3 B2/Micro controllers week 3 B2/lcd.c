@@ -4,10 +4,7 @@
  * Created: 25-2-2018 19:56:47
  *  Author: Ian
  */ 
-#ifndef F_CPU
-	#define F_CPU 8000000
-#endif
-
+#define F_CPU 8000000
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -24,8 +21,8 @@ static void writeByte(uint8_t operation, uint8_t data);
 static void LCD_4bit_mode();
 
 void init(void) {
-	DDRD = 0xFF:
-	PORTD = 0x00;
+	DDRC = 0xFF;
+	PORTC = 0x00;
 
 	//Set in 4 Bit Mode
 	LCD_4bit_mode();
@@ -47,7 +44,7 @@ void init(void) {
 }
 
 void display_text(char *str) {
-	//writeByte(WRITE_COMMAND, 0x02);
+	writeByte(WRITE_COMMAND, 0x02);
 	for(;*str; str++) {
 		writeByte(WRITE_DATA, *str);
 	}

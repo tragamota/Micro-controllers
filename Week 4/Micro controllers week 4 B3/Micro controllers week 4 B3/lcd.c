@@ -41,7 +41,7 @@ void init(void) {
 }
 
 void display_text(char *str) {
-	//writeByte(WRITE_COMMAND, 0x02);
+	writeByte(WRITE_COMMAND, 0x02);
 	for(;*str; str++) {
 		writeByte(WRITE_DATA, *str);
 	}

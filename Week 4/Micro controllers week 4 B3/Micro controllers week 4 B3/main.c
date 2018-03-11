@@ -12,6 +12,12 @@
 
 #include "lcd.h"
 
+void wait(int ms) {
+	for(int i = 0; i < ms; i++) {
+		_delay_ms(1);
+	}
+}
+
 int main(void)
 {
 	init();
@@ -27,9 +33,13 @@ int main(void)
 		PORTB = ADCH;
 		
 		char[16] tempInText;
-		float temp = ADCH;
-		sprintf(tempInText, "Temp: %f0.2", temp);
-
+		int temp = ADCH;
+		sprintf(tempInText, "Temp: %d", temp);
+		
+		clear_LCD();
+		display_text(tempInText);
+		
+		wait(1000);
 	}
 }
 

@@ -6,6 +6,8 @@
  */ 
 #define F_CPU 8000000
 
+#include <stdio.h>
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
@@ -22,7 +24,7 @@ int main(void)
 {
 	init();
 	
-	DDRB = 0xFF;
+	DDRA = 0xFF;
 	DDRF = 0x00;
 
 	ADMUX	= 0b11100000;
@@ -30,14 +32,14 @@ int main(void)
 	
 	while (1)
 	{
-		PORTB = ADCH;
+		PORTA = ADCH;
 		
-		char[16] tempInText;
-		int temp = ADCH;
-		sprintf(tempInText, "Temp: %d", temp);
+		char tempText[16] = "";
+		int temp = 100;
+		sprintf(tempText, "T  %d", temp);
 		
 		clear_LCD();
-		display_text(tempInText);
+		display_text(tempText);
 		
 		wait(1000);
 	}

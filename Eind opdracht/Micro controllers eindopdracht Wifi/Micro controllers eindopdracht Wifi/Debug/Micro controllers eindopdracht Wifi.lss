@@ -3,29 +3,29 @@ Micro controllers eindopdracht Wifi.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000004  00800100  0000013e  000001b2  2**0
+  0 .data         00000048  00800100  00000242  000002b6  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         0000013e  00000000  00000000  00000074  2**1
+  1 .text         00000242  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000001b6  2**0
+  2 .comment      00000030  00000000  00000000  000002fe  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001e8  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000330  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000048  00000000  00000000  00000224  2**0
+  4 .debug_aranges 00000098  00000000  00000000  0000036c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000a09  00000000  00000000  0000026c  2**0
+  5 .debug_info   00000fe5  00000000  00000000  00000404  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 000008ee  00000000  00000000  00000c75  2**0
+  6 .debug_abbrev 00000ad1  00000000  00000000  000013e9  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000002b7  00000000  00000000  00001563  2**0
+  7 .debug_line   000005b8  00000000  00000000  00001eba  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000074  00000000  00000000  0000181c  2**2
+  8 .debug_frame  0000013c  00000000  00000000  00002474  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000048f  00000000  00000000  00001890  2**0
+  9 .debug_str    00000582  00000000  00000000  000025b0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000000ad  00000000  00000000  00001d1f  2**0
+ 10 .debug_loc    000004e8  00000000  00000000  00002b32  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000028  00000000  00000000  00001dcc  2**0
+ 11 .debug_ranges 00000080  00000000  00000000  0000301a  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -114,150 +114,325 @@ Disassembly of section .text:
   98:	11 e0       	ldi	r17, 0x01	; 1
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
-  9e:	ee e3       	ldi	r30, 0x3E	; 62
-  a0:	f1 e0       	ldi	r31, 0x01	; 1
+  9e:	e2 e4       	ldi	r30, 0x42	; 66
+  a0:	f2 e0       	ldi	r31, 0x02	; 2
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
   a6:	02 c0       	rjmp	.+4      	; 0xac <__do_copy_data+0x14>
   a8:	07 90       	elpm	r0, Z+
   aa:	0d 92       	st	X+, r0
-  ac:	a4 30       	cpi	r26, 0x04	; 4
+  ac:	a8 34       	cpi	r26, 0x48	; 72
   ae:	b1 07       	cpc	r27, r17
   b0:	d9 f7       	brne	.-10     	; 0xa8 <__do_copy_data+0x10>
-  b2:	02 d0       	rcall	.+4      	; 0xb8 <main>
-  b4:	42 c0       	rjmp	.+132    	; 0x13a <_exit>
+  b2:	52 d0       	rcall	.+164    	; 0x158 <main>
+  b4:	c4 c0       	rjmp	.+392    	; 0x23e <_exit>
 
 000000b6 <__bad_interrupt>:
   b6:	a4 cf       	rjmp	.-184    	; 0x0 <__vectors>
 
-000000b8 <main>:
+000000b8 <togglePinE>:
 
+ void shift_text(int position) {
+	 for(int i = 0; i < position; i++) {
+		 writeByte(WRITE_COMMAND, 0x18);
+	 }
+ }
+  b8:	ab 9a       	sbi	0x15, 3	; 21
+  ba:	8f ec       	ldi	r24, 0xCF	; 207
+  bc:	97 e0       	ldi	r25, 0x07	; 7
+  be:	01 97       	sbiw	r24, 0x01	; 1
+  c0:	f1 f7       	brne	.-4      	; 0xbe <togglePinE+0x6>
+  c2:	00 c0       	rjmp	.+0      	; 0xc4 <togglePinE+0xc>
+  c4:	00 00       	nop
+  c6:	ab 98       	cbi	0x15, 3	; 21
+  c8:	8f ec       	ldi	r24, 0xCF	; 207
+  ca:	97 e0       	ldi	r25, 0x07	; 7
+  cc:	01 97       	sbiw	r24, 0x01	; 1
+  ce:	f1 f7       	brne	.-4      	; 0xcc <togglePinE+0x14>
+  d0:	00 c0       	rjmp	.+0      	; 0xd2 <togglePinE+0x1a>
+  d2:	00 00       	nop
+  d4:	08 95       	ret
+
+000000d6 <LCD_Command>:
+  d6:	cf 93       	push	r28
+  d8:	c8 2f       	mov	r28, r24
+  da:	80 7f       	andi	r24, 0xF0	; 240
+  dc:	85 bb       	out	0x15, r24	; 21
+  de:	ec df       	rcall	.-40     	; 0xb8 <togglePinE>
+  e0:	20 e1       	ldi	r18, 0x10	; 16
+  e2:	c2 9f       	mul	r28, r18
+  e4:	c0 01       	movw	r24, r0
+  e6:	11 24       	eor	r1, r1
+  e8:	85 bb       	out	0x15, r24	; 21
+  ea:	e6 df       	rcall	.-52     	; 0xb8 <togglePinE>
+  ec:	cf 91       	pop	r28
+  ee:	08 95       	ret
+
+000000f0 <init>:
+  f0:	80 e2       	ldi	r24, 0x20	; 32
+  f2:	85 bb       	out	0x15, r24	; 21
+  f4:	85 b3       	in	r24, 0x15	; 21
+  f6:	82 bb       	out	0x12, r24	; 18
+  f8:	df df       	rcall	.-66     	; 0xb8 <togglePinE>
+  fa:	88 e2       	ldi	r24, 0x28	; 40
+  fc:	ec df       	rcall	.-40     	; 0xd6 <LCD_Command>
+  fe:	8c e0       	ldi	r24, 0x0C	; 12
+ 100:	ea df       	rcall	.-44     	; 0xd6 <LCD_Command>
+ 102:	81 e0       	ldi	r24, 0x01	; 1
+ 104:	e8 df       	rcall	.-48     	; 0xd6 <LCD_Command>
+ 106:	82 e0       	ldi	r24, 0x02	; 2
+ 108:	e6 df       	rcall	.-52     	; 0xd6 <LCD_Command>
+ 10a:	15 ba       	out	0x15, r1	; 21
+ 10c:	08 95       	ret
+
+0000010e <display_text>:
+ 10e:	0f 93       	push	r16
+ 110:	1f 93       	push	r17
+ 112:	cf 93       	push	r28
+ 114:	fc 01       	movw	r30, r24
+ 116:	c0 81       	ld	r28, Z
+ 118:	cc 23       	and	r28, r28
+ 11a:	a1 f0       	breq	.+40     	; 0x144 <display_text+0x36>
+ 11c:	8c 01       	movw	r16, r24
+ 11e:	0f 5f       	subi	r16, 0xFF	; 255
+ 120:	1f 4f       	sbci	r17, 0xFF	; 255
+ 122:	8c 2f       	mov	r24, r28
+ 124:	80 7f       	andi	r24, 0xF0	; 240
+ 126:	85 bb       	out	0x15, r24	; 21
+ 128:	aa 9a       	sbi	0x15, 2	; 21
+ 12a:	c6 df       	rcall	.-116    	; 0xb8 <togglePinE>
+ 12c:	f0 e1       	ldi	r31, 0x10	; 16
+ 12e:	cf 9f       	mul	r28, r31
+ 130:	90 01       	movw	r18, r0
+ 132:	11 24       	eor	r1, r1
+ 134:	25 bb       	out	0x15, r18	; 21
+ 136:	aa 9a       	sbi	0x15, 2	; 21
+ 138:	bf df       	rcall	.-130    	; 0xb8 <togglePinE>
+ 13a:	f8 01       	movw	r30, r16
+ 13c:	c1 91       	ld	r28, Z+
+ 13e:	8f 01       	movw	r16, r30
+ 140:	c1 11       	cpse	r28, r1
+ 142:	ef cf       	rjmp	.-34     	; 0x122 <display_text+0x14>
+ 144:	15 ba       	out	0x15, r1	; 21
+ 146:	cf 91       	pop	r28
+ 148:	1f 91       	pop	r17
+ 14a:	0f 91       	pop	r16
+ 14c:	08 95       	ret
+
+0000014e <clear_LCD>:
+	 togglePinE();
+ }
+
+ static void writeByte(uint8_t operation, uint8_t data) {
+	 if(operation == WRITE_COMMAND) {
+		 LCD_Command(data);
+ 14e:	81 e0       	ldi	r24, 0x01	; 1
+ 150:	c2 df       	rcall	.-124    	; 0xd6 <LCD_Command>
+ 152:	82 e0       	ldi	r24, 0x02	; 2
+ 154:	c0 cf       	rjmp	.-128    	; 0xd6 <LCD_Command>
+ 156:	08 95       	ret
+
+00000158 <main>:
 #include "Wifi.h"
+#include "lcd.h"
 
 int main(void)
 {
+	DDRC = 0xFF;
+ 158:	8f ef       	ldi	r24, 0xFF	; 255
+ 15a:	84 bb       	out	0x14, r24	; 20
+	PORTC = 0x00;
+ 15c:	15 ba       	out	0x15, r1	; 21
+	init();
+ 15e:	c8 df       	rcall	.-112    	; 0xf0 <init>
+	//display_text("LCD working");
 	WifiInit();
-  b8:	01 d0       	rcall	.+2      	; 0xbc <WifiInit>
-  ba:	ff cf       	rjmp	.-2      	; 0xba <main+0x2>
+ 160:	01 d0       	rcall	.+2      	; 0x164 <WifiInit>
+ 162:	ff cf       	rjmp	.-2      	; 0x162 <main+0xa>
 
-000000bc <WifiInit>:
+00000164 <WifiInit>:
+ 164:	ef 92       	push	r14
 
 static void WifiTest(void);
 static void WifiWriteChar(unsigned char);
 static unsigned char WifiReadChar(void);
 
 void WifiInit(void) {
-  bc:	0f 93       	push	r16
-  be:	1f 93       	push	r17
-  c0:	cf 93       	push	r28
-  c2:	df 93       	push	r29
-  c4:	00 d0       	rcall	.+0      	; 0xc6 <WifiInit+0xa>
-  c6:	00 d0       	rcall	.+0      	; 0xc8 <WifiInit+0xc>
-  c8:	1f 92       	push	r1
-  ca:	cd b7       	in	r28, 0x3d	; 61
-  cc:	de b7       	in	r29, 0x3e	; 62
+ 166:	ff 92       	push	r15
+ 168:	1f 93       	push	r17
+ 16a:	cf 93       	push	r28
+ 16c:	df 93       	push	r29
+ 16e:	00 d0       	rcall	.+0      	; 0x170 <WifiInit+0xc>
+ 170:	00 d0       	rcall	.+0      	; 0x172 <WifiInit+0xe>
+ 172:	00 d0       	rcall	.+0      	; 0x174 <WifiInit+0x10>
+ 174:	cd b7       	in	r28, 0x3d	; 61
+ 176:	de b7       	in	r29, 0x3e	; 62
 	int baud = REGBAUD;
 	UBRR0H = (baud>>8);		//highest 4 bits of the baudrate
-  ce:	10 92 90 00 	sts	0x0090, r1	; 0x800090 <__TEXT_REGION_LENGTH__+0x7e0090>
+ 178:	10 92 90 00 	sts	0x0090, r1	; 0x800090 <__TEXT_REGION_LENGTH__+0x7e0090>
 	UBRR0L = baud;			//lowest byte of the baudrate
-  d2:	83 e0       	ldi	r24, 0x03	; 3
-  d4:	89 b9       	out	0x09, r24	; 9
+ 17c:	83 e3       	ldi	r24, 0x33	; 51
+ 17e:	89 b9       	out	0x09, r24	; 9
 		
 	UCSR0B = 0x0C;			//enable TX en RX
-  d6:	8c e0       	ldi	r24, 0x0C	; 12
-  d8:	8a b9       	out	0x0a, r24	; 10
+ 180:	8c e0       	ldi	r24, 0x0C	; 12
+ 182:	8a b9       	out	0x0a, r24	; 10
 	UCSR0C = 0x06;			//asychroon 8bits en no parity ingesteld.
-  da:	86 e0       	ldi	r24, 0x06	; 6
-  dc:	80 93 95 00 	sts	0x0095, r24	; 0x800095 <__TEXT_REGION_LENGTH__+0x7e0095>
-  e0:	e1 e0       	ldi	r30, 0x01	; 1
-  e2:	f1 e0       	ldi	r31, 0x01	; 1
-  e4:	81 e4       	ldi	r24, 0x41	; 65
+ 184:	86 e0       	ldi	r24, 0x06	; 6
+ 186:	80 93 95 00 	sts	0x0095, r24	; 0x800095 <__TEXT_REGION_LENGTH__+0x7e0095>
+	clear_LCD();
+ 18a:	e1 df       	rcall	.-62     	; 0x14e <clear_LCD>
+	display_text("Baudinit");
+ 18c:	80 e0       	ldi	r24, 0x00	; 0
+ 18e:	91 e0       	ldi	r25, 0x01	; 1
+ 190:	be df       	rcall	.-132    	; 0x10e <display_text>
+ 192:	ea e0       	ldi	r30, 0x0A	; 10
+ 194:	f1 e0       	ldi	r31, 0x01	; 1
+ 196:	81 e4       	ldi	r24, 0x41	; 65
 void WifiRequestAP(char **AP) {
 	
 }
 
 static void WifiWriteChar(unsigned char commandByte) {
 	while(!(UCSR0A & (1<<UDRE0)));
-  e6:	5d 9b       	sbis	0x0b, 5	; 11
-  e8:	fe cf       	rjmp	.-4      	; 0xe6 <WifiInit+0x2a>
+ 198:	5d 9b       	sbis	0x0b, 5	; 11
+ 19a:	fe cf       	rjmp	.-4      	; 0x198 <WifiInit+0x34>
 	UDR0 = commandByte;
-  ea:	8c b9       	out	0x0c, r24	; 12
+ 19c:	8c b9       	out	0x0c, r24	; 12
 }
 
 static void WifiTest(void) {
-	char *ATCommand = "AT";
+	char *ATCommand = "AT\r\n";
 		
 	for(;*ATCommand; ATCommand++) {
-  ec:	81 91       	ld	r24, Z+
-  ee:	81 11       	cpse	r24, r1
-  f0:	fa cf       	rjmp	.-12     	; 0xe6 <WifiInit+0x2a>
-  f2:	03 e0       	ldi	r16, 0x03	; 3
-  f4:	10 e0       	ldi	r17, 0x00	; 0
+ 19e:	81 91       	ld	r24, Z+
+ 1a0:	81 11       	cpse	r24, r1
+ 1a2:	fa cf       	rjmp	.-12     	; 0x198 <WifiInit+0x34>
+ 1a4:	23 c0       	rjmp	.+70     	; 0x1ec <WifiInit+0x88>
 	while(!(UCSR0A & (1<<UDRE0)));
 	UDR0 = commandByte;
 }
 
 static unsigned char WifiReadChar(void) {
 	while(!(UCSR0A & (1<<RXC)));
-  f6:	5f 9b       	sbis	0x0b, 7	; 11
-  f8:	fe cf       	rjmp	.-4      	; 0xf6 <WifiInit+0x3a>
-	return UDR0;
-  fa:	8c b1       	in	r24, 0x0c	; 12
-	}
-	
-	char receiveBuffer[4]; 
+ 1a6:	5f 9b       	sbis	0x0b, 7	; 11
+ 1a8:	fe cf       	rjmp	.-4      	; 0x1a6 <WifiInit+0x42>
+	clear_LCD();
+	display_text("Send command");
+	char receiveBuffer[5]; 
 	
 	for(int i = 0; i < (sizeof(receiveBuffer) / sizeof(char)) - 1; i++) {
 		char receivedByte = WifiReadChar();
-  fc:	8d 83       	std	Y+5, r24	; 0x05
+ 1aa:	1c b1       	in	r17, 0x0c	; 12
+		clear_LCD();
+ 1ac:	1e 83       	std	Y+6, r17	; 0x06
+ 1ae:	cf df       	rcall	.-98     	; 0x14e <clear_LCD>
+		display_text("  Byte: " + receivedByte);
+ 1b0:	81 2f       	mov	r24, r17
+ 1b2:	90 e0       	ldi	r25, 0x00	; 0
+ 1b4:	82 5f       	subi	r24, 0xF2	; 242
+ 1b6:	9e 4f       	sbci	r25, 0xFE	; 254
+ 1b8:	aa df       	rcall	.-172    	; 0x10e <display_text>
 		strcat(receiveBuffer, &receivedByte);
-  fe:	be 01       	movw	r22, r28
- 100:	6b 5f       	subi	r22, 0xFB	; 251
- 102:	7f 4f       	sbci	r23, 0xFF	; 255
- 104:	ce 01       	movw	r24, r28
- 106:	01 96       	adiw	r24, 0x01	; 1
- 108:	0d d0       	rcall	.+26     	; 0x124 <strcat>
- 10a:	01 50       	subi	r16, 0x01	; 1
- 10c:	11 09       	sbc	r17, r1
-		WifiWriteChar(*ATCommand);
+ 1ba:	be 01       	movw	r22, r28
+ 1bc:	6a 5f       	subi	r22, 0xFA	; 250
+ 1be:	7f 4f       	sbci	r23, 0xFF	; 255
+ 1c0:	ce 01       	movw	r24, r28
+ 1c2:	01 96       	adiw	r24, 0x01	; 1
+ 1c4:	28 d0       	rcall	.+80     	; 0x216 <strcat>
+ 1c6:	81 e0       	ldi	r24, 0x01	; 1
+ 1c8:	e8 1a       	sub	r14, r24
+ 1ca:	f1 08       	sbc	r15, r1
 	}
 	
-	char receiveBuffer[4]; 
-	
-	for(int i = 0; i < (sizeof(receiveBuffer) / sizeof(char)) - 1; i++) {
- 10e:	99 f7       	brne	.-26     	; 0xf6 <WifiInit+0x3a>
-		
+	if(!strcmp(receiveBuffer, "OK")) {
+ 1cc:	61 f7       	brne	.-40     	; 0x1a6 <WifiInit+0x42>
+ 1ce:	67 e1       	ldi	r22, 0x17	; 23
+ 1d0:	71 e0       	ldi	r23, 0x01	; 1
+ 1d2:	ce 01       	movw	r24, r28
+ 1d4:	01 96       	adiw	r24, 0x01	; 1
+ 1d6:	2a d0       	rcall	.+84     	; 0x22c <strcmp>
+ 1d8:	89 2b       	or	r24, r25
+		display_text("WiFi Working!");
+ 1da:	21 f4       	brne	.+8      	; 0x1e4 <WifiInit+0x80>
+ 1dc:	8a e1       	ldi	r24, 0x1A	; 26
+ 1de:	91 e0       	ldi	r25, 0x01	; 1
+	}
+	else {
+		display_text("WiFi not Working!");
+ 1e0:	96 df       	rcall	.-212    	; 0x10e <display_text>
+ 1e2:	0d c0       	rjmp	.+26     	; 0x1fe <WifiInit+0x9a>
+ 1e4:	88 e2       	ldi	r24, 0x28	; 40
 	UCSR0B = 0x0C;			//enable TX en RX
 	UCSR0C = 0x06;			//asychroon 8bits en no parity ingesteld.
-	
+	clear_LCD();
+	display_text("Baudinit");
 	WifiTest();
 }
- 110:	0f 90       	pop	r0
- 112:	0f 90       	pop	r0
- 114:	0f 90       	pop	r0
- 116:	0f 90       	pop	r0
- 118:	0f 90       	pop	r0
- 11a:	df 91       	pop	r29
- 11c:	cf 91       	pop	r28
- 11e:	1f 91       	pop	r17
- 120:	0f 91       	pop	r16
- 122:	08 95       	ret
+ 1e6:	91 e0       	ldi	r25, 0x01	; 1
+	char *ATCommand = "AT\r\n";
+		
+	for(;*ATCommand; ATCommand++) {
+		WifiWriteChar(*ATCommand);
+	}
+	clear_LCD();
+ 1e8:	92 df       	rcall	.-220    	; 0x10e <display_text>
+ 1ea:	09 c0       	rjmp	.+18     	; 0x1fe <WifiInit+0x9a>
+	display_text("Send command");
+ 1ec:	b0 df       	rcall	.-160    	; 0x14e <clear_LCD>
+ 1ee:	8a e3       	ldi	r24, 0x3A	; 58
+ 1f0:	91 e0       	ldi	r25, 0x01	; 1
+ 1f2:	8d df       	rcall	.-230    	; 0x10e <display_text>
+ 1f4:	68 94       	set
+ 1f6:	ee 24       	eor	r14, r14
+ 1f8:	e2 f8       	bld	r14, 2
+ 1fa:	f1 2c       	mov	r15, r1
+ 1fc:	d4 cf       	rjmp	.-88     	; 0x1a6 <WifiInit+0x42>
+	UCSR0B = 0x0C;			//enable TX en RX
+	UCSR0C = 0x06;			//asychroon 8bits en no parity ingesteld.
+	clear_LCD();
+	display_text("Baudinit");
+	WifiTest();
+}
+ 1fe:	26 96       	adiw	r28, 0x06	; 6
+ 200:	0f b6       	in	r0, 0x3f	; 63
+ 202:	f8 94       	cli
+ 204:	de bf       	out	0x3e, r29	; 62
+ 206:	0f be       	out	0x3f, r0	; 63
+ 208:	cd bf       	out	0x3d, r28	; 61
+ 20a:	df 91       	pop	r29
+ 20c:	cf 91       	pop	r28
+ 20e:	1f 91       	pop	r17
+ 210:	ff 90       	pop	r15
+ 212:	ef 90       	pop	r14
+ 214:	08 95       	ret
 
-00000124 <strcat>:
- 124:	fb 01       	movw	r30, r22
- 126:	dc 01       	movw	r26, r24
- 128:	0d 90       	ld	r0, X+
- 12a:	00 20       	and	r0, r0
- 12c:	e9 f7       	brne	.-6      	; 0x128 <strcat+0x4>
- 12e:	11 97       	sbiw	r26, 0x01	; 1
- 130:	01 90       	ld	r0, Z+
- 132:	0d 92       	st	X+, r0
- 134:	00 20       	and	r0, r0
- 136:	e1 f7       	brne	.-8      	; 0x130 <strcat+0xc>
- 138:	08 95       	ret
+00000216 <strcat>:
+ 216:	fb 01       	movw	r30, r22
+ 218:	dc 01       	movw	r26, r24
+ 21a:	0d 90       	ld	r0, X+
+ 21c:	00 20       	and	r0, r0
+ 21e:	e9 f7       	brne	.-6      	; 0x21a <strcat+0x4>
+ 220:	11 97       	sbiw	r26, 0x01	; 1
+ 222:	01 90       	ld	r0, Z+
+ 224:	0d 92       	st	X+, r0
+ 226:	00 20       	and	r0, r0
+ 228:	e1 f7       	brne	.-8      	; 0x222 <strcat+0xc>
+ 22a:	08 95       	ret
 
-0000013a <_exit>:
- 13a:	f8 94       	cli
+0000022c <strcmp>:
+ 22c:	fb 01       	movw	r30, r22
+ 22e:	dc 01       	movw	r26, r24
+ 230:	8d 91       	ld	r24, X+
+ 232:	01 90       	ld	r0, Z+
+ 234:	80 19       	sub	r24, r0
+ 236:	01 10       	cpse	r0, r1
+ 238:	d9 f3       	breq	.-10     	; 0x230 <strcmp+0x4>
+ 23a:	99 0b       	sbc	r25, r25
+ 23c:	08 95       	ret
 
-0000013c <__stop_program>:
- 13c:	ff cf       	rjmp	.-2      	; 0x13c <__stop_program>
+0000023e <_exit>:
+ 23e:	f8 94       	cli
+
+00000240 <__stop_program>:
+ 240:	ff cf       	rjmp	.-2      	; 0x240 <__stop_program>

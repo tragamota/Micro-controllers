@@ -15,7 +15,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define BAUDRATE 115200
+#include "lcd.h"
+
+#define BAUDRATE 9600
 #define REGBAUD F_CPU/16/BAUDRATE - 1
 
 static void WifiTest(void);
@@ -29,29 +31,33 @@ void WifiInit(void) {
 		
 	UCSR0B = 0x0C;			//enable TX en RX
 	UCSR0C = 0x06;			//asychroon 8bits en no parity ingesteld.
-	
+	clear_LCD();
+	display_text("Baudinit");
 	WifiTest();
 }
 
 static void WifiTest(void) {
-	char *ATCommand = "AT";
+	char *ATCommand = "AT\r\n";
 		
 	for(;*ATCommand; ATCommand++) {
 		WifiWriteChar(*ATCommand);
 	}
-	
-	char receiveBuffer[4]; 
+	clear_LCD();
+	display_text("Send command");
+	char receiveBuffer[5]; 
 	
 	for(int i = 0; i < (sizeof(receiveBuffer) / sizeof(char)) - 1; i++) {
 		char receivedByte = WifiReadChar();
+		clear_LCD();
+		display_text("  Byte: " + receivedByte);
 		strcat(receiveBuffer, &receivedByte);
 	}
 	
 	if(!strcmp(receiveBuffer, "OK")) {
-		//write to LCD wifi working
+		display_text("WiFi Working!");
 	}
 	else {
-		//write to LCD wifi not working
+		display_text("WiFi not Working!");
 	}
 }
 

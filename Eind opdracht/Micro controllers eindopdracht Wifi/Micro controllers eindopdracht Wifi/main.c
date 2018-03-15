@@ -10,11 +10,16 @@
 #include <util/delay.h>
 
 #include "Wifi.h"
+#include "lcd.h"
 
 int main(void)
 {
+	DDRC = 0xFF;
+	PORTC = 0x00;
+	init();
+	//display_text("LCD working");
 	WifiInit();
-    /* Replace with your application code */
+    
     while (1) 
     {
 		

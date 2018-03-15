@@ -16,8 +16,10 @@ int main(void)
 {
 	DDRC = 0xFF;
 	PORTC = 0x00;
+
+	DDRE = 0x02;
+	
 	init();
-	//display_text("LCD working");
 	WifiInit();
     
     while (1) 

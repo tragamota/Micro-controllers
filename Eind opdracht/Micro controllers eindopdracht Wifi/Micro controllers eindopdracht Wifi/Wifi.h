@@ -7,10 +7,7 @@
 
 void WifiInit(void);
 void WifiConnectToAP(char *SSID, char *password);
-void WifiRequestAP(char **AP);
 void WifiTcpConnect(char *IP, int port);
-void WifiTcpSendData(char *data);
+void WifiTcpSendData(char *data, int size);
 void WifiTcpReadData(char *rdata);
 void WifiTcpClose(void);
-void WifiLowPower(void);
-void WifiWakeUp(void);

@@ -74,7 +74,6 @@ int main(void) {
 	enableInterrupt();
 	
  	char headerWithData[256];
- 	combineHeaderWithData(HUE_GROUP_ON_JSON, headerWithData, strlen(HUE_GROUP_ON_JSON));
  	char userLightAction_shadowCopy;
 
     while (1) 

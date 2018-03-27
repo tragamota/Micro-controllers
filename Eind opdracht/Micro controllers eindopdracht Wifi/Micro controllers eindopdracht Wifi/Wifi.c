@@ -4,9 +4,7 @@
  * Created: 14-3-2018 18:05:31
  *  Author: Ian
  */ 
-#ifndef F_CPU
-	#define F_CPU 8000000
-#endif
+#define F_CPU 8000000
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -22,9 +20,9 @@
 #define BAUDRATE 9600
 #define REGBAUD F_CPU/16/BAUDRATE - 1
 
-static void WifiTest(void);
-static void WifiWriteChar(unsigned char);
-static unsigned char WifiReadChar(void);
+void WifiTest(void);
+void WifiWriteChar(unsigned char);
+unsigned char WifiReadChar(void);
 
 void wait(int ms) {
 	for(int i = 0; i < ms; i++) {
@@ -44,30 +42,29 @@ void WifiInit(void) {
 	WifiTest();
 }
 
-static void WifiTest(void) {
-	char *ATCommand = "AT\r\n";
+void WifiTest(void) {
+	char ATCommand[] = "AT\r\n";
 	
-	for(;*ATCommand; ATCommand++) {
-		WifiWriteChar(*ATCommand);
+	int i = 0;
+	while(ATCommand[i] != '\0') {
+		unsigned char dataToSend = ATCommand[i];
+		WifiWriteChar(dataToSend);
+		i++;
 	}
+	wait(1000);
+}
 
-	char receiveBuffer[5]; 
-	
-	for(int i = 0; i < 4; i++) {
- 		char receivedByte = WifiReadChar();
- 		strcat(receiveBuffer, &receivedByte);
-	}
+void WifiConnectToAP(char *SSID, char *password) {
+	char APCommand[80];
+	sprintf(APCommand, "%s\"%s\",\"%s\"\r\n", "AT+CWJAP=", SSID, password);
 
-	clear_LCD();
-	if(strstr(receiveBuffer, "OK") != NULL) {
-		display_text("Wifi Is OK");
+	int i = 0;
+	while(APCommand[i] != '\0') {
+		unsigned char dataToSend = APCommand[i];
+		WifiWriteChar(dataToSend);
+		i++;
 	}
-	if(!strcmp(receiveBuffer, "OK\r\n")) {
-		display_text("WiFi Working!");
-	}
-	else {
-		display_text("WiFi not Working!");
-	}
+	wait(10000);
 }
 
 void WifiTcpConnect(char *IP, int port) {
@@ -90,13 +87,15 @@ void WifiTcpSendData(char *data, int size) {
 	
 	while(tcpSendDataCommand[i] != '\0') {
 		WifiWriteChar(tcpSendDataCommand[i]);
+		i++;
 	}
 	
 	i = 0;
 	while(data[i] != '\0') {
 		WifiWriteChar(data[i]);
+		i++;
 	}
-	wait(500);
+	wait(250);
 }
 
 void WifiTcpClose() {
@@ -108,12 +107,12 @@ void WifiTcpClose() {
 	wait(100);
 }
 
-static void WifiWriteChar(unsigned char commandByte) {
+void WifiWriteChar(unsigned char commandByte) {
 	while(!(UCSR0A & (1<<UDRE0)));
 	UDR0 = commandByte;
 }
 
-static unsigned char WifiReadChar(void) {
+unsigned char WifiReadChar(void) {
 	while(!(UCSR0A & (1<<RXC0)));
 	return UDR0;
 }

@@ -10,12 +10,6 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-void wait(int ms) {
-	for(int i= 0; i < ms; i++) {
-		_delay_ms(1);
-	}
-}
-
 int main(void)
 {
 	DDRF = 0x00;
@@ -23,10 +17,12 @@ int main(void)
 	DDRB = 0xFF;
 
 	ADMUX	= 0b01100000;
-	ADCSRA	= 0b11100110;
+	ADCSRA	= 0b10000110;
 	
     while (1) 
     {
+		ADCSRA |= (1<<6);
+		while ( ADCSRA & (1<<6)) ;
 		PORTA = ADCH;
 		PORTB = ADCL;
 	}

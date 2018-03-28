@@ -17,12 +17,10 @@ int main(void)
 	DDRB = 0xFF;
 
 	ADMUX	= 0b01100000;
-	ADCSRA	= 0b10000110;
+	ADCSRA	= 0b11100110;
 	
-    while (1) 
-    {
-		ADCSRA |= (1<<6);
-		while ( ADCSRA & (1<<6)) ;
+	while (1)
+	{
 		PORTA = ADCH;
 		PORTB = ADCL;
 	}

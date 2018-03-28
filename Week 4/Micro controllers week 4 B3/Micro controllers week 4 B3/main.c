@@ -22,6 +22,7 @@ void wait(int ms) {
 
 int main(void)
 {
+	DDRC = 0xFF;
 	init();
 	
 	DDRA = 0xFF;
@@ -32,16 +33,14 @@ int main(void)
 	
 	while (1)
 	{
-		PORTA = ADCH;
-		
-		char tempText[16] = "";
-		int temp = 100;
-		sprintf(tempText, "T  %d", temp);
+		char tempText[16];
+		int temp = ADCH;
+		sprintf(tempText, "Temp  %d", temp);
 		
 		clear_LCD();
 		display_text(tempText);
 		
-		wait(1000);
+		wait(1500);
 	}
 }
 

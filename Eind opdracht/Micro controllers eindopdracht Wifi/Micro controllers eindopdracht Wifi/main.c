@@ -18,16 +18,16 @@
 #include "Wifi.h"
 #include "lcd.h"
 
-#define AP_SSID "Moto G (5S) Plus 3617"
-#define AP_PASSWORD "Ianvdpoll"
+#define AP_SSID "UPC1842974"
+#define AP_PASSWORD "MJDWKRGD"
 
 #define LIGHT_ON 1
 #define LIGHT_OFF 0
 #define LIGHT_NO_ACTION 2
 
-#define HUE_USER_KEY "null"
-#define HUE_IP "192.168.0.23"
-#define HUE_PORT 80
+#define HUE_USER_KEY "newdeveloper"
+#define HUE_IP "192.168.0.28"
+#define HUE_PORT 8000
 #define HUE_GROUP_URL "/api/"HUE_USER_KEY"/groups/0/action"
 
 char userLightAction = LIGHT_NO_ACTION;
@@ -48,7 +48,7 @@ void enableInterrupt() {
 	PORTD	= 0x03;
 	
 	//interrupts are rising edge and activated
-	EICRA = 0x0F;
+	EICRA = 0xFF;
 	EIMSK = 0x03;
 	sei();
 }
@@ -68,31 +68,32 @@ void combineHeaderWithData(char *data, char *des, int size) {
 
 
 int main(void) {
+	DDRA	= 0xFF;
+	PORTA	= 0x00;
+	
 	init();
 	WifiInit();
 	WifiConnectToAP(AP_SSID, AP_PASSWORD);
+	display_text("Ready for use");
 	enableInterrupt();
 	
- 	char headerWithData[256];
+ 	char headerWithData[512];
  	char userLightAction_shadowCopy;
-
+	
     while (1) 
     {
-		ATOMIC_BLOCK(ATOMIC_FORCEON) {
- 			userLightAction_shadowCopy = userLightAction;
- 			userLightAction = LIGHT_NO_ACTION;
- 		}
+ 		userLightAction_shadowCopy = userLightAction;
+ 		userLightAction = LIGHT_NO_ACTION;
  		
  		if(userLightAction_shadowCopy != LIGHT_NO_ACTION) {
- 			WifiTcpConnect(HUE_IP, HUE_PORT);
  			if(userLightAction_shadowCopy == LIGHT_ON) {
  				combineHeaderWithData(HUE_GROUP_ON_JSON, headerWithData, strlen(HUE_GROUP_ON_JSON));
- 				WifiTcpSendData(headerWithData, strlen(headerWithData));
  			}
  			else {
  				combineHeaderWithData(HUE_GROUP_OFF_JSON, headerWithData, strlen(HUE_GROUP_OFF_JSON));
- 				WifiTcpSendData(headerWithData, strlen(headerWithData));
  			}
+			WifiTcpConnect(HUE_IP, HUE_PORT);
+			WifiTcpSendData(headerWithData, strlen(headerWithData));
  			WifiTcpClose();
  		}
  		//go in sleep

@@ -64,38 +64,38 @@ void WifiConnectToAP(char *SSID, char *password) {
 		WifiWriteChar(dataToSend);
 		i++;
 	}
-	wait(10000);
+	wait(20000);
 }
 
 void WifiTcpConnect(char *IP, int port) {
-	char tcpStartCommand[50];
-	sprintf(tcpStartCommand, "%s,%s,%d\r\n", "AT+CIPSTART=\"TCP\"", IP, port);
-	
 	int i = 0;
+	char tcpStartCommand[80];
+	sprintf(tcpStartCommand, "%s,\"%s\",%d\r\n", "AT+CIPSTART=\"TCP\"", IP, port);
+	
 	while(tcpStartCommand[i] != '\0') {
 		WifiWriteChar(tcpStartCommand[i]);
+		i++;
 	}
-	wait(250);
+	wait(50);
 }
 
-void WifiTcpSendData(char *data, int size) {
+void WifiTcpSendData(char data[], int size) {
 	int i = 0;
 	char tcpSendDataCommand[18];
-	
 	sprintf(tcpSendDataCommand, "%s%d\r\n", "AT+CIPSEND=", size);
-	
 	
 	while(tcpSendDataCommand[i] != '\0') {
 		WifiWriteChar(tcpSendDataCommand[i]);
 		i++;
 	}
+	wait(25);
 	
 	i = 0;
 	while(data[i] != '\0') {
 		WifiWriteChar(data[i]);
 		i++;
 	}
-	wait(250);
+	wait(25);
 }
 
 void WifiTcpClose() {
